@@ -1,4 +1,4 @@
-package tree;
+package tree.algorithms;
 
 import java.util.ArrayList;
 
