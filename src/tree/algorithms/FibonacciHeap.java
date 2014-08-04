@@ -21,7 +21,6 @@ public class FibonacciHeap {
             newNode.next = this.root;
             merge(newNode);
         }
-        System.out.println(this.root);
     }
 
     private void merge(FibonacciHeapNode root) {

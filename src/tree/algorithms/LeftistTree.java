@@ -1,7 +1,7 @@
 package tree.algorithms;
 
 import tree.node.LeftistTreeNode;
-import util.LeftTreePrinter;
+import util.LeftistTreePrinter;
 
 import java.util.ArrayList;
 
@@ -273,6 +273,6 @@ public class LeftistTree {
     }
 
     public void printAll() {
-        LeftTreePrinter.printNode(this.root);
+        LeftistTreePrinter.printNode(this.root);
     }
 }

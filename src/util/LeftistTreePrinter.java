@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class LeftTreePrinter {
+public class LeftistTreePrinter {
 
 	public static <T extends Comparable<?>> void printNode(LeftistTreeNode root) {
-		int maxLevel = LeftTreePrinter.maxLevel(root);
+		int maxLevel = LeftistTreePrinter.maxLevel(root);
 
 		if (maxLevel == 0)
 			System.out.println("[ ]\n");
@@ -19,7 +19,7 @@ public class LeftTreePrinter {
 
 	private static <T extends Comparable<?>> void printNodeInternal(
 			List<LeftistTreeNode> list, int level, int maxLevel) {
-		if (list.isEmpty() || LeftTreePrinter.isAllElementsNull(list))
+		if (list.isEmpty() || LeftistTreePrinter.isAllElementsNull(list))
 			return;
 
 		int floor = maxLevel - level;
@@ -27,7 +27,7 @@ public class LeftTreePrinter {
 		int firstSpaces = (int) Math.pow(2, (floor)) - 1;
 		int betweenSpaces = (int) Math.pow(2, (floor + 1)) - 1;
 
-		LeftTreePrinter.printWhitespaces(firstSpaces);
+		LeftistTreePrinter.printWhitespaces(firstSpaces);
 
 		List<LeftistTreeNode> newNodes = new ArrayList<LeftistTreeNode>();
 		for (LeftistTreeNode node : list) {
@@ -40,15 +40,15 @@ public class LeftTreePrinter {
 				newNodes.add(null);
 				System.out.print(" ");
 			}
-			LeftTreePrinter.printWhitespaces(betweenSpaces);
+			LeftistTreePrinter.printWhitespaces(betweenSpaces);
 		}
 		System.out.println("");
 
 		for (int i = 1; i <= endgeLines; i++) {
 			for (int j = 0; j < list.size(); j++) {
-				LeftTreePrinter.printWhitespaces(firstSpaces - i);
+				LeftistTreePrinter.printWhitespaces(firstSpaces - i);
 				if (list.get(j) == null) {
-					LeftTreePrinter.printWhitespaces(endgeLines + endgeLines + i
+					LeftistTreePrinter.printWhitespaces(endgeLines + endgeLines + i
                             + 1);
 					continue;
 				}
@@ -56,16 +56,16 @@ public class LeftTreePrinter {
 				if (list.get(j).left != null)
 					System.out.print("/");
 				else
-					LeftTreePrinter.printWhitespaces(1);
+					LeftistTreePrinter.printWhitespaces(1);
 
-				LeftTreePrinter.printWhitespaces(i + i - 1);
+				LeftistTreePrinter.printWhitespaces(i + i - 1);
 
 				if (list.get(j).right != null)
 					System.out.print("\\");
 				else
-					LeftTreePrinter.printWhitespaces(1);
+					LeftistTreePrinter.printWhitespaces(1);
 
-				LeftTreePrinter.printWhitespaces(endgeLines + endgeLines - i);
+				LeftistTreePrinter.printWhitespaces(endgeLines + endgeLines - i);
 			}
 
 			System.out.println("");
@@ -83,7 +83,7 @@ public class LeftTreePrinter {
 		if (node == null)
 			return 0;
 
-		return Math.max(LeftTreePrinter.maxLevel(node.left), LeftTreePrinter.maxLevel(node.right)) + 1;
+		return Math.max(LeftistTreePrinter.maxLevel(node.left), LeftistTreePrinter.maxLevel(node.right)) + 1;
 	}
 
 	private static <T> boolean isAllElementsNull(List<T> list) {

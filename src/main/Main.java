@@ -3,7 +3,8 @@ package main;
 import element.Element;
 import tree.algorithms.FibonacciHeap;
 import tree.algorithms.LeftistTree;
-import util.LeftTreeGraphicPrinter;
+import util.FibonacciHeapGraphicPrinter;
+import util.LeftistTreeGraphicPrinter;
 
 public class Main {
 
@@ -48,7 +49,7 @@ public class Main {
 
 //        leftistTree.printAll();
 
-        LeftTreeGraphicPrinter.drawAll("Left Tree", leftistTree);
+        LeftistTreeGraphicPrinter.drawAll("Leftist Tree", leftistTree);
 
     }
 
@@ -59,6 +60,7 @@ public class Main {
             fibonacciHeap.insert(element.value);
         }
 
+        FibonacciHeapGraphicPrinter.drawAll("Fibonacci Heap", fibonacciHeap);
     }
 
 
