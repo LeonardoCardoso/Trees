@@ -58,7 +58,7 @@ public class SurfaceTree extends JPanel {
 
         JFrame f = new JFrame(title);
 
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         setPreferredSize(new Dimension(screenWidth, DIMENSION_WIDTH * tree.height()));
         JScrollPane scrollFrame = new JScrollPane(this);

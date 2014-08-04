@@ -40,9 +40,9 @@ public class LeftistTree {
      * Lazy merge: joins two left trees
      */
     public void merge(LeftistTreeNode root, LeftistTreeNode newNode) {
-        // Considering the element with small priority/value on the top
+        // Considering the element with largest value on the top
 
-        if (root.parent == null && root.value.compareTo(newNode.value) > 0) {
+        if (root.parent == null && root.value.compareTo(newNode.value) < 0) { // invert here to change to small priority on top
 
             newNode.right = root;
             root.parent = newNode;
@@ -56,7 +56,7 @@ public class LeftistTree {
 
             performSwap(this.root);
 
-        } else if (root.right.value.compareTo(newNode.value) > 0) {
+        } else if (root.right.value.compareTo(newNode.value) < 0) { // invert here to change to small priority on top
             LeftistTreeNode detached = root.right;
             root.right = newNode;
             newNode.parent = root;
@@ -70,6 +70,9 @@ public class LeftistTree {
      * Null Path Length: The shortest distance bettween the current node to the closest null node
      */
     public int npl(LeftistTreeNode root, int npl) {
+        if (root == null)
+            return -1;
+
         if (root.left != null && root.right != null) {
             int left = npl(root.left, npl);
             int right = npl(root.right, npl);
@@ -103,7 +106,7 @@ public class LeftistTree {
                 int rightNpl = right == null ? -1 : npl(right, -1);
                 int leftNpl = left == null ? -1 : npl(left, -1);
 
-                if (rightNpl > leftNpl || (rightNpl == leftNpl && leftValue.compareTo(rightValue) > 0)) {
+                if (rightNpl > leftNpl || (rightNpl == leftNpl && leftValue.compareTo(rightValue) < 0)) { // invert here to change to small priority on top
                     swap(toBeSwapped);
                 }
 
@@ -175,7 +178,7 @@ public class LeftistTree {
                 }
                 System.out.println("\nElement removed successfully.");
             } else {
-                if (toBeRemoved.left.value.compareTo(toBeRemoved.right.value) < 0) {
+                if (toBeRemoved.left.value.compareTo(toBeRemoved.right.value) > 0) { // invert here to change to small priority on top
                     newRoot = toBeRemoved.left;
                     newRoot.parent = null;
                     merge(newRoot, toBeRemoved.right);
@@ -272,5 +275,4 @@ public class LeftistTree {
     public void printAll() {
         LeftTreePrinter.printNode(this.root);
     }
-
 }
