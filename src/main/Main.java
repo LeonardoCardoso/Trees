@@ -1,8 +1,10 @@
 package main;
 
 import element.Element;
+import tree.algorithms.AVLTree;
 import tree.algorithms.FibonacciHeap;
 import tree.algorithms.LeftistTree;
+import util.AVLTreeGraphicPrinter;
 import util.FibonacciHeapGraphicPrinter;
 import util.LeftistTreeGraphicPrinter;
 
@@ -36,11 +38,25 @@ public class Main {
     };
 
     public static void main(String[] args) {
-//        callLeftTree();
-        callFibonacciHeap();
+//        callAVLTree();
+//        callLeftistTree();
+//        callFibonacciHeap();
     }
 
-    private static void callLeftTree() {
+    private static void callAVLTree() {
+        AVLTree avlTree = new AVLTree();
+
+        for (Element element : SET) {
+            avlTree.insert(element.value);
+        }
+
+//        avlTree.printAll();
+
+        AVLTreeGraphicPrinter.drawAll("AVL Tree", avlTree);
+
+    }
+
+    private static void callLeftistTree() {
         LeftistTree leftistTree = new LeftistTree();
 
         for (Element element : SET) {

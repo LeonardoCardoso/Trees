@@ -1,7 +1,7 @@
 package graphics;
 
-import tree.algorithms.LeftistTree;
-import tree.node.LeftistTreeNode;
+import tree.algorithms.AVLTree;
+import tree.node.TreeNode;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -11,26 +11,24 @@ import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SurfaceTree extends JPanel {
+public class SurfaceTreeForAVLTree extends JPanel {
 
     private static final long serialVersionUID = -9054075219988539709L;
-    private LeftistTree tree;
-    private LeftistTreeNode root;
+    private AVLTree tree;
     private String title = "";
     private int screenWidth, screenHeight;
 
-    public static final int DIMENSION_TOP = 66, DIMENSION_WIDTH = 300;
+    public static final int DIMENSION_TOP = 66, DIMENSION_LEFT = 70, DIMENSION_WIDTH = 300, DIMENSION_HEIGHT = 60;
 
     Node selection = null;
 
     Point linkEnd = null;
     Node linkTarget = null;
 
-    public SurfaceTree(String title, LeftistTree tree) {
+    public SurfaceTreeForAVLTree(String title, AVLTree tree) {
         setDimensions();
         this.title = title;
         this.tree = tree;
-        this.root = tree.top();
 
         setDimensions();
         setLayout(null);
@@ -38,11 +36,11 @@ public class SurfaceTree extends JPanel {
         addMouseListener(mouseListener);
         addMouseMotionListener(mouseListener);
 
-        setPreferredSize(new Dimension(screenWidth, screenHeight));
+        setPreferredSize(new Dimension(screenWidth, screenHeight + getRectNextTop(tree.height())));
 
         setSelection(null);
 
-        printAll(this.root, null, null, screenWidth / 2);
+        buildData();
 
         JFrame frame = makeFrame();
         frame.setVisible(true);
@@ -60,7 +58,7 @@ public class SurfaceTree extends JPanel {
 
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        setPreferredSize(new Dimension(screenWidth, DIMENSION_WIDTH * tree.height()));
+        setPreferredSize(new Dimension(screenWidth - DIMENSION_TOP, screenHeight - DIMENSION_TOP * 2));
         JScrollPane scrollFrame = new JScrollPane(this);
         setAutoscrolls(true);
         scrollFrame.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -73,13 +71,21 @@ public class SurfaceTree extends JPanel {
         return f;
     }
 
-    private void printAll(LeftistTreeNode root, LeftistTreeNode parent, Node parentNode, int parentPosition) {
+    private void buildData() {
+        printAll(tree.top(), null, null, screenWidth / 2);
+    }
+
+    private void printAll(TreeNode root, TreeNode parent, Node parentNode, int parentPosition) {
         Node p;
 
         if (root != null && parent == null) {
-            p = makeNode(root.value + "<br/>npl: " + tree.npl(root, -1), new Point(parentPosition, getRectNextTop(-1)), Node.COLOR_PARENT);
+            p = makeNode(root.value, new Point(parentPosition, getRectNextTop(0)), Node.COLOR_PARENT);
         } else {
             p = parentNode;
+        }
+
+        if (root == null) {
+            p = makeNode("", new Point(parentPosition, getRectNextTop(0)), Node.COLOR_PARENT);
         }
 
         if (root != null) {
@@ -88,13 +94,13 @@ public class SurfaceTree extends JPanel {
         }
     }
 
-    public void recursivePrint(LeftistTreeNode root, int parentPosition, Node innerNode, Node p) {
+    public void recursivePrint(TreeNode root, int parentPosition, Node innerNode, Node p) {
         Node innerParent;
         int position;
 
         if (root != null) {
 
-            int height = tree.heightRootToNode(root);
+            int height = heightRootToNode(root);
             int nextTop = getRectNextTop(height);
 
             if (innerNode != null)
@@ -104,10 +110,10 @@ public class SurfaceTree extends JPanel {
 
             if (root.parent.left != null && root.parent.left.equals(root)) {
                 position = getRectNextLeft(parentPosition, height);
-                innerNode = makeNode(root.value + "<br/>npl: " + tree.npl(root, -1), new Point(position, nextTop), Node.COLOR_LEFT);
+                innerNode = makeNode(root.value, new Point(position, nextTop), Node.COLOR_LEFT);
             } else {
                 position = getRectNextRight(parentPosition, height);
-                innerNode = makeNode(root.value + "<br/>npl: " + tree.npl(root, -1), new Point(position, nextTop), Node.COLOR_RIGHT);
+                innerNode = makeNode(root.value, new Point(position, nextTop), Node.COLOR_RIGHT);
             }
 
             innerNode.setParent(innerParent);
@@ -120,6 +126,28 @@ public class SurfaceTree extends JPanel {
 
     }
 
+    private int getRectNextLeft(int parentPosition, int division) {
+        return -DIMENSION_WIDTH / division + parentPosition;
+    }
+
+    private int getRectNextRight(int parentPosition, int division) {
+        return DIMENSION_WIDTH / division + parentPosition;
+    }
+
+    private int getRectNextTop(int i) {
+        return (i + 1) * DIMENSION_TOP + i * DIMENSION_HEIGHT / 2;
+    }
+
+    public int heightRootToNode(TreeNode currentNode) {
+        int height = 0;
+
+        while (currentNode.parent != null) {
+            height++;
+            currentNode = currentNode.parent;
+        }
+
+        return height;
+    }
 
     public class Node extends JLabel {
 
@@ -209,7 +237,7 @@ public class SurfaceTree extends JPanel {
         super.paintChildren(g);
     }
 
-    // make a new node
+    // make a new tree.node
     public Node makeNode(String text, Point pt, String color) {
         Node n = new Node(text, pt, color);
         add(n);
@@ -268,21 +296,6 @@ public class SurfaceTree extends JPanel {
         }
 
         selection = n;
-    }
-
-    private int getRectNextLeft(int parentPosition, int division) {
-        return -DIMENSION_WIDTH / division + parentPosition;
-    }
-
-    private int getRectNextRight(int parentPosition, int division) {
-        return DIMENSION_WIDTH / division + parentPosition;
-    }
-
-    private int getRectNextTop(int i) {
-        if (i == -1)
-            return DIMENSION_TOP;
-
-        return (i + 1) * DIMENSION_TOP;
     }
 
     @Override

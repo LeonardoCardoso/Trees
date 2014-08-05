@@ -12,6 +12,8 @@ public class Surface extends JPanel {
     public static final int DIMENSION_TOP = 66, DIMENSION_LEFT = 35, DIMENSION_WIDTH = 60, DIMENSION_HEIGHT = 60;
     public static final int OFFSET = -2, SIDE_OFFSET = 1;
     public static final int LINE_HEIGHT = 15;
+    public static final int LOAD_FACTOR_TOP = 20;
+    public static final int BALANCING_FACTOR_TOP = 40;
     public static final int NUMBER_WIDTH = 5, NUMBER_POS = DIMENSION_TOP - NUMBER_WIDTH;
 
     private SimpleNode[] nodes;

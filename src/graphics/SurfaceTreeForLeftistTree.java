@@ -1,6 +1,5 @@
 package graphics;
 
-import tree.algorithms.FibonacciHeap;
 import tree.algorithms.LeftistTree;
 import tree.node.LeftistTreeNode;
 
@@ -12,24 +11,26 @@ import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SurfaceTreeForFibonacciHeaps extends JPanel {
+public class SurfaceTreeForLeftistTree extends JPanel {
 
     private static final long serialVersionUID = -9054075219988539709L;
-    private FibonacciHeap heap;
+    private LeftistTree tree;
+    private LeftistTreeNode root;
     private String title = "";
     private int screenWidth, screenHeight;
 
-    public static final int DIMENSION_TOP = 100, DIMENSION_LEFT = 35, DIMENSION_WIDTH = 100, DIMENSION_HEIGHT = 60;
+    public static final int DIMENSION_TOP = 66, DIMENSION_WIDTH = 300;
 
     Node selection = null;
 
     Point linkEnd = null;
     Node linkTarget = null;
 
-    public SurfaceTreeForFibonacciHeaps(String title, FibonacciHeap heap) {
+    public SurfaceTreeForLeftistTree(String title, LeftistTree tree) {
         setDimensions();
         this.title = title;
-        this.heap = heap;
+        this.tree = tree;
+        this.root = tree.top();
 
         setDimensions();
         setLayout(null);
@@ -41,7 +42,7 @@ public class SurfaceTreeForFibonacciHeaps extends JPanel {
 
         setSelection(null);
 
-        buildData();
+        printAll(this.root, null, null, screenWidth / 2);
 
         JFrame frame = makeFrame();
         frame.setVisible(true);
@@ -59,7 +60,7 @@ public class SurfaceTreeForFibonacciHeaps extends JPanel {
 
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        setPreferredSize(new Dimension(screenWidth, screenHeight - DIMENSION_LEFT));
+        setPreferredSize(new Dimension(screenWidth, DIMENSION_WIDTH * tree.height()));
         JScrollPane scrollFrame = new JScrollPane(this);
         setAutoscrolls(true);
         scrollFrame.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -72,39 +73,28 @@ public class SurfaceTreeForFibonacciHeaps extends JPanel {
         return f;
     }
 
-    private void buildData() {
-        int i = 0;
-        while (heap.root != null) {
-            printAll(heap.root.tree, null, null, getRectNextLeft(i), i);
-            i++;
-            heap.root = heap.root.next;
-        }
-    }
-
-    private void printAll(LeftistTree tree, LeftistTreeNode parent, Node parentNode, int parentPosition, int i) {
+    private void printAll(LeftistTreeNode root, LeftistTreeNode parent, Node parentNode, int parentPosition) {
         Node p;
 
-        LeftistTreeNode node = tree.root;
-
-        if (node != null && parent == null) {
-            p = makeNode(node.value + "<br/>npl: " + tree.npl(node, -1), new Point(parentPosition, getRectNextTop(-1)), Node.COLOR_PARENT, i);
+        if (root != null && parent == null) {
+            p = makeNode(root.value + "<br/>npl: " + tree.npl(root, -1), new Point(parentPosition, getRectNextTop(-1)), Node.COLOR_PARENT);
         } else {
             p = parentNode;
         }
 
-        if (node != null) {
-            recursivePrint(tree, node.left, parentPosition, null, p, i);
-            recursivePrint(tree, node.right, parentPosition, null, p, i);
+        if (root != null) {
+            recursivePrint(root.left, parentPosition, null, p);
+            recursivePrint(root.right, parentPosition, null, p);
         }
     }
 
-    public void recursivePrint(LeftistTree tree, LeftistTreeNode node, int parentPosition, Node innerNode, Node p, int i) {
+    public void recursivePrint(LeftistTreeNode root, int parentPosition, Node innerNode, Node p) {
         Node innerParent;
         int position;
 
-        if (node != null) {
+        if (root != null) {
 
-            int height = tree.heightRootToNode(node);
+            int height = tree.heightRootToNode(root);
             int nextTop = getRectNextTop(height);
 
             if (innerNode != null)
@@ -112,20 +102,20 @@ public class SurfaceTreeForFibonacciHeaps extends JPanel {
             else
                 innerParent = p;
 
-            if (node.parent.left != null && node.parent.left.equals(node)) {
+            if (root.parent.left != null && root.parent.left.equals(root)) {
                 position = getRectNextLeft(parentPosition, height);
-                innerNode = makeNode(node.value + "<br/>npl: " + tree.npl(node, -1), new Point(position, nextTop), Node.COLOR_LEFT, i);
+                innerNode = makeNode(root.value + "<br/>npl: " + tree.npl(root, -1), new Point(position, nextTop), Node.COLOR_LEFT);
             } else {
                 position = getRectNextRight(parentPosition, height);
-                innerNode = makeNode(node.value + "<br/>npl: " + tree.npl(node, -1), new Point(position, nextTop), Node.COLOR_RIGHT, i);
+                innerNode = makeNode(root.value + "<br/>npl: " + tree.npl(root, -1), new Point(position, nextTop), Node.COLOR_RIGHT);
             }
 
             innerNode.setParent(innerParent);
             parentPosition = position;
 
             // --
-            recursivePrint(tree, node.left, parentPosition, innerNode, p, i);
-            recursivePrint(tree, node.right, parentPosition, innerNode, p, i);
+            recursivePrint(root.left, parentPosition, innerNode, p);
+            recursivePrint(root.right, parentPosition, innerNode, p);
         }
 
     }
@@ -138,10 +128,9 @@ public class SurfaceTreeForFibonacciHeaps extends JPanel {
         private Set<Node> children = new HashSet<Node>();
         public static final String COLOR_LEFT = "red", COLOR_RIGHT = "blue", COLOR_PARENT = "black";
 
-        public Node(String text, Point location, String color, int index) {
+        public Node(String text, Point location, String color) {
             super("<html>"
-                    + (color == COLOR_PARENT ? "<div style='border: 1px dashed black; border-bottom: 0px; text-align: center;'>"
-                    + index + "</div>" : "") + "<div style='width: 35px; height: 35px; color: " + color
+                    + "<div style='width: 35px; height: 35px; color: " + color
                     + "; font-family: Arial; padding-top: 10px; text-align: center; background: white; "
                     + "border: 1px solid black; margin: auto;'>" + text + "<div></html>");
             setOpaque(true);
@@ -221,8 +210,8 @@ public class SurfaceTreeForFibonacciHeaps extends JPanel {
     }
 
     // make a new node
-    public Node makeNode(String text, Point pt, String color, int i) {
-        Node n = new Node(text, pt, color, i);
+    public Node makeNode(String text, Point pt, String color) {
+        Node n = new Node(text, pt, color);
         add(n);
         return n;
     }
@@ -281,16 +270,12 @@ public class SurfaceTreeForFibonacciHeaps extends JPanel {
         selection = n;
     }
 
-    private int getRectNextLeft(int i) {
-        return DIMENSION_LEFT + (i + 1) * (DIMENSION_WIDTH * 2 + DIMENSION_HEIGHT);
-    }
-
     private int getRectNextLeft(int parentPosition, int division) {
-        return -DIMENSION_WIDTH / (division + 1) + parentPosition;
+        return -DIMENSION_WIDTH / division + parentPosition;
     }
 
     private int getRectNextRight(int parentPosition, int division) {
-        return DIMENSION_WIDTH / (division + 1) + parentPosition;
+        return DIMENSION_WIDTH / division + parentPosition;
     }
 
     private int getRectNextTop(int i) {
@@ -305,7 +290,7 @@ public class SurfaceTreeForFibonacciHeaps extends JPanel {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
-        g2d.drawString("Black node = heap node", 50, 30);
+        g2d.drawString("Black node = root node", 50, 30);
         g2d.drawString("Red nodes = left nodes", 50, 50);
         g2d.drawString("Blue nodes = right nodes", 50, 70);
     }

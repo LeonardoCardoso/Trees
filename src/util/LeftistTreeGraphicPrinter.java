@@ -1,6 +1,6 @@
 package util;
 
-import graphics.SurfaceTree;
+import graphics.SurfaceTreeForLeftistTree;
 import tree.algorithms.LeftistTree;
 
 import javax.swing.*;
@@ -11,7 +11,7 @@ public class LeftistTreeGraphicPrinter {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new SurfaceTree(title, tree);
+                new SurfaceTreeForLeftistTree(title, tree);
             }
         });
     }

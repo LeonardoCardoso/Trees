@@ -1,6 +1,6 @@
 package util;
 
-import graphics.SurfaceTreeForFibonacciHeaps;
+import graphics.SurfaceTreeForFibonacciHeap;
 import tree.algorithms.FibonacciHeap;
 
 import javax.swing.*;
@@ -11,7 +11,7 @@ public class FibonacciHeapGraphicPrinter {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new SurfaceTreeForFibonacciHeaps(title, heap);
+                new SurfaceTreeForFibonacciHeap(title, heap);
             }
         });
     }

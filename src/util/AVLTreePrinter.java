@@ -32,7 +32,7 @@ public class AVLTreePrinter {
 		List<TreeNode> newNodes = new ArrayList<TreeNode>();
 		for (TreeNode node : list) {
 			if (node != null) {
-				System.out.print(node.key + "," + node.value);
+				System.out.print(node.value);
 				newNodes.add(node.left);
 				newNodes.add(node.right);
 			} else {
