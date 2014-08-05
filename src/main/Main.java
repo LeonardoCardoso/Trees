@@ -40,7 +40,7 @@ public class Main {
     public static void main(String[] args) {
 //        callAVLTree();
 //        callLeftistTree();
-//        callFibonacciHeap();
+        callFibonacciHeap();
     }
 
     private static void callAVLTree() {
@@ -75,6 +75,8 @@ public class Main {
         for (Element element : SET) {
             fibonacciHeap.insert(element.value);
         }
+
+//        fibonacciHeap.find("17");
 
         FibonacciHeapGraphicPrinter.drawAll("Fibonacci Heap", fibonacciHeap);
     }

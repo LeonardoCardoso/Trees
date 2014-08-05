@@ -1,6 +1,7 @@
 package tree.algorithms;
 
 import tree.node.FibonacciHeapNode;
+import tree.node.LeftistTreeNode;
 
 public class FibonacciHeap {
 
@@ -39,6 +40,24 @@ public class FibonacciHeap {
                 this.root = root;
             }
         }
+    }
+
+    public void find(String s) {
+        int i = 0;
+        FibonacciHeapNode root = this.root;
+        LeftistTreeNode element = null;
+        if (root != null) {
+            do {
+                element = root.tree.find(s);
+                if (element != null) {
+                    System.out.println("Element with value " + s + " found in node " + i);
+                    break;
+                }
+                i++;
+                root = root.next;
+            } while (root != null);
+        }
+
     }
 
 }
