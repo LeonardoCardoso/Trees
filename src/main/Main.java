@@ -77,6 +77,7 @@ public class Main {
         }
 
 //        fibonacciHeap.find("17");
+//        fibonacciHeap.remove();
 
         FibonacciHeapGraphicPrinter.drawAll("Fibonacci Heap", fibonacciHeap);
     }

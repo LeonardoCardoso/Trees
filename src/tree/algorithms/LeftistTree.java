@@ -43,26 +43,29 @@ public class LeftistTree {
         // Considering the element with largest value on the top
 
         if (root.parent == null && root.value.compareTo(newNode.value) < 0) { // invert here to change to small priority on top
+            if (newNode.right == null) {
+                newNode.right = root;
+            } else {
+                merge(newNode, root);
+            }
 
-            newNode.right = root;
             root.parent = newNode;
             newNode.parent = null;
-            swap(newNode);
+            performSwap(newNode);
             this.root = newNode;
-
         } else if (root.right == null) {
             root.right = newNode;
             newNode.parent = root;
-
-            performSwap(this.root);
-
+            performSwap(root);
         } else if (root.right.value.compareTo(newNode.value) < 0) { // invert here to change to small priority on top
             LeftistTreeNode detached = root.right;
             root.right = newNode;
             newNode.parent = root;
             merge(newNode, detached);
+            performSwap(newNode);
         } else {
             merge(root.right, newNode);
+            performSwap(root.right);
         }
     }
 
@@ -84,35 +87,30 @@ public class LeftistTree {
 
     private void performSwap(LeftistTreeNode root) {
         if (root != null) {
-            if (root.left == null) { // npl == -1
-                swap(root);
+            LeftistTreeNode right, left, toBeSwapped;
+
+            if (root.parent != null) {
+                toBeSwapped = root.parent;
+                right = toBeSwapped.right;
+                left = toBeSwapped.left;
             } else {
-
-                LeftistTreeNode right, left, toBeSwapped;
-
-                if (root.parent != null) {
-                    toBeSwapped = root.parent;
-                    right = toBeSwapped.right;
-                    left = toBeSwapped.left;
-                } else {
-                    toBeSwapped = root;
-                    right = root.right;
-                    left = root.left;
-                }
-
-                String rightValue = right == null ? "" : right.value;
-                String leftValue = left == null ? "" : left.value;
-
-                int rightNpl = right == null ? -1 : npl(right, -1);
-                int leftNpl = left == null ? -1 : npl(left, -1);
-
-                if (rightNpl > leftNpl || (rightNpl == leftNpl && leftValue.compareTo(rightValue) < 0)) { // invert here to change to small priority on top
-                    swap(toBeSwapped);
-                }
-
-                performSwap(root.left);
-                performSwap(root.right);
+                toBeSwapped = root;
+                right = root.right;
+                left = root.left;
             }
+
+            String rightValue = right == null ? "" : right.value;
+            String leftValue = left == null ? "" : left.value;
+
+            int rightNpl = right == null ? -1 : npl(right, -1);
+            int leftNpl = left == null ? -1 : npl(left, -1);
+
+            if (rightNpl > leftNpl || (rightNpl == leftNpl && leftValue.compareTo(rightValue) < 0)) { // invert here to change to small priority on top
+                swap(toBeSwapped);
+            }
+
+            performSwap(root.left);
+            performSwap(root.right);
         }
     }
 

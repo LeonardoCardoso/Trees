@@ -25,6 +25,7 @@ public class SurfaceTreeForFibonacciHeap extends JPanel {
 
     Point linkEnd = null;
     Node linkTarget = null;
+    int i = 0;
 
     public SurfaceTreeForFibonacciHeap(String title, FibonacciHeap heap) {
         setDimensions();
@@ -73,7 +74,6 @@ public class SurfaceTreeForFibonacciHeap extends JPanel {
     }
 
     private void buildData() {
-        int i = 0;
         while (heap.root != null) {
             printAll(heap.root.tree, null, null, getRectNextLeft(i), i);
             i++;
@@ -90,6 +90,10 @@ public class SurfaceTreeForFibonacciHeap extends JPanel {
             p = makeNode(node.value + "<br/>npl: " + tree.npl(node, -1), new Point(parentPosition, getRectNextTop(-1)), Node.COLOR_PARENT, i);
         } else {
             p = parentNode;
+        }
+
+        if (tree.top() == null) {
+            this.i--;
         }
 
         if (node != null) {
