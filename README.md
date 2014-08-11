@@ -9,6 +9,7 @@ This project contains:
 	<li>Leftist Tree</li>
 	<li>Fibonacci Heap (collection of leftist trees)</li>
 	<li>Splay Tree (in development)</li>
+	<li>Red–black Tree (to be developed)</li>
 	<li>B Tree (to be developed)</li>
 	<li>B+ Tree (to be developed)</li>
 </ul>

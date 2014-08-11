@@ -1,6 +1,6 @@
 package util;
 
-import graphics.SurfaceTreeForFibonacciHeap;
+import util.graphics.SurfaceTreeForFibonacciHeap;
 import tree.algorithms.FibonacciHeap;
 
 import javax.swing.*;

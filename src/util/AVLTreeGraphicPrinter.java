@@ -1,6 +1,6 @@
 package util;
 
-import graphics.SurfaceTreeForAVLTree;
+import util.graphics.SurfaceTreeForAVLTree;
 import tree.algorithms.AVLTree;
 
 import javax.swing.*;

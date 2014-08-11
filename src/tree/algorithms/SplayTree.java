@@ -1,7 +1,7 @@
 package tree.algorithms;
 
-import tree.node.LeftistTreeNode;
-import util.LeftistTreePrinter;
+import tree.node.SplayTreeNode;
+import util.SplayTreePrinter;
 
 import java.util.ArrayList;
 
@@ -9,24 +9,24 @@ import java.util.ArrayList;
  * Rules
  * 1. npl(left) >= npl(right)
  * 2. prio(root) >= prio(root.left) >= prio(root.right)
- * Leftist tree is not a search structure, then it allows duplicate values
+ * Splay tree is not a search structure, then it allows duplicate values
  */
-public class LeftistTree {
+public class SplayTree {
 
-    public LeftistTreeNode root;
+    public SplayTreeNode root;
 
     /**
      * Core Functions
      */
     public void insert(String value) {
-        LeftistTreeNode n = new LeftistTreeNode(value);
+        SplayTreeNode n = new SplayTreeNode(value);
         insertLeftTree(this.root, n);
     }
 
     /**
      * Insert new node
      */
-    private void insertLeftTree(LeftistTreeNode currentNode, LeftistTreeNode newNode) {
+    private void insertLeftTree(SplayTreeNode currentNode, SplayTreeNode newNode) {
 
         if (currentNode == null) {
             this.root = newNode;
@@ -39,7 +39,7 @@ public class LeftistTree {
     /**
      * Lazy merge: joins two left trees
      */
-    public void merge(LeftistTreeNode root, LeftistTreeNode newNode) {
+    public void merge(SplayTreeNode root, SplayTreeNode newNode) {
         // Considering the tree.element with largest value on the top
 
         if (root.parent == null && root.value.compareTo(newNode.value) < 0) { // invert here to change to small priority on top
@@ -58,7 +58,7 @@ public class LeftistTree {
             newNode.parent = root;
             performSwap(root);
         } else if (root.right.value.compareTo(newNode.value) < 0) { // invert here to change to small priority on top
-            LeftistTreeNode detached = root.right;
+            SplayTreeNode detached = root.right;
             root.right = newNode;
             newNode.parent = root;
             merge(newNode, detached);
@@ -72,7 +72,7 @@ public class LeftistTree {
     /**
      * Null Path Length: The shortest distance bettween the current node to the closest null node
      */
-    public int npl(LeftistTreeNode root, int npl) {
+    public int npl(SplayTreeNode root, int npl) {
         if (root == null)
             return -1;
 
@@ -85,9 +85,9 @@ public class LeftistTree {
         return npl + 1;
     }
 
-    private void performSwap(LeftistTreeNode root) {
+    private void performSwap(SplayTreeNode root) {
         if (root != null) {
-            LeftistTreeNode right, left, toBeSwapped;
+            SplayTreeNode right, left, toBeSwapped;
 
             if (root.parent != null) {
                 toBeSwapped = root.parent;
@@ -114,8 +114,8 @@ public class LeftistTree {
         }
     }
 
-    private void swap(LeftistTreeNode left) {
-        LeftistTreeNode swap = left.left;
+    private void swap(SplayTreeNode left) {
+        SplayTreeNode swap = left.left;
         left.left = left.right;
         left.right = swap;
     }
@@ -123,16 +123,16 @@ public class LeftistTree {
     /**
      * Finds a node
      */
-    public LeftistTreeNode find(String value) {
+    public SplayTreeNode find(String value) {
         return find(this.root, value);
     }
 
     /**
      * Finds a node
      */
-    public LeftistTreeNode find(LeftistTreeNode currentNode, String value) {
+    public SplayTreeNode find(SplayTreeNode currentNode, String value) {
 
-        LeftistTreeNode result = null;
+        SplayTreeNode result = null;
 
         if (currentNode != null) {
             if (currentNode.value.equals(value)) {
@@ -163,10 +163,10 @@ public class LeftistTree {
     /**
      * Removes the node from the top..
      */
-    private void removeLeftTree(LeftistTreeNode startingNode) {
+    private void removeLeftTree(SplayTreeNode startingNode) {
         if (this.root != null) {
-            LeftistTreeNode toBeRemoved = this.root;
-            LeftistTreeNode newRoot;
+            SplayTreeNode toBeRemoved = this.root;
+            SplayTreeNode newRoot;
             if (this.root.right == null) {
                 if (this.root.left == null) {
                     this.root = null;
@@ -198,7 +198,7 @@ public class LeftistTree {
      * Helper Functions
      */
 
-    public LeftistTreeNode top() {
+    public SplayTreeNode top() {
         return this.root;
     }
 
@@ -209,7 +209,7 @@ public class LeftistTree {
     /**
      * Calculating the height of a node.
      */
-    private int height(LeftistTreeNode currentNode) {
+    private int height(SplayTreeNode currentNode) {
         if (currentNode == null) {
             return -1;
         }
@@ -227,7 +227,7 @@ public class LeftistTree {
     /**
      * Calculating the height of a node according to the root.
      */
-    public int heightRootToNode(LeftistTreeNode currentNode) {
+    public int heightRootToNode(SplayTreeNode currentNode) {
         int height = 0;
 
         while (currentNode.parent != null) {
@@ -252,8 +252,8 @@ public class LeftistTree {
     /**
      * Calculates the Inorder traversal of this tree.
      */
-    public ArrayList<LeftistTreeNode> inOrder() {
-        ArrayList<LeftistTreeNode> ret = new ArrayList<LeftistTreeNode>();
+    public ArrayList<SplayTreeNode> inOrder() {
+        ArrayList<SplayTreeNode> ret = new ArrayList<SplayTreeNode>();
         inOrder(root, ret);
         return ret;
     }
@@ -261,7 +261,7 @@ public class LeftistTree {
     /**
      * Function to calculate in order recursively.
      */
-    private void inOrder(LeftistTreeNode node, ArrayList<LeftistTreeNode> io) {
+    private void inOrder(SplayTreeNode node, ArrayList<SplayTreeNode> io) {
         if (node == null) {
             return;
         }
@@ -271,6 +271,6 @@ public class LeftistTree {
     }
 
     public void printAll() {
-        LeftistTreePrinter.printNode(this.root);
+        SplayTreePrinter.printNode(this.root);
     }
 }

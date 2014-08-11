@@ -43,7 +43,7 @@ public class FibonacciHeap {
     }
 
     /**
-     * Removes the hight priority element. It runs through the list.
+     * Removes the hight priority tree.element. It runs through the list.
      * */
     public void remove() {
         if (this.root != null) {

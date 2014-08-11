@@ -1,6 +1,6 @@
 package util;
 
-import graphics.SurfaceTreeForLeftistTree;
+import util.graphics.SurfaceTreeForLeftistTree;
 import tree.algorithms.LeftistTree;
 
 import javax.swing.*;

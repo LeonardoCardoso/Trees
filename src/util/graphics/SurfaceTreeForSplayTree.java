@@ -1,7 +1,7 @@
-package graphics;
+package util.graphics;
 
-import tree.algorithms.LeftistTree;
-import tree.node.LeftistTreeNode;
+import tree.algorithms.SplayTree;
+import tree.node.SplayTreeNode;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -11,11 +11,11 @@ import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SurfaceTreeForLeftistTree extends JPanel {
+public class SurfaceTreeForSplayTree extends JPanel {
 
     private static final long serialVersionUID = -9054075219988539709L;
-    private LeftistTree tree;
-    private LeftistTreeNode root;
+    private SplayTree tree;
+    private SplayTreeNode root;
     private String title = "";
     private int screenWidth, screenHeight;
 
@@ -26,7 +26,7 @@ public class SurfaceTreeForLeftistTree extends JPanel {
     Point linkEnd = null;
     Node linkTarget = null;
 
-    public SurfaceTreeForLeftistTree(String title, LeftistTree tree) {
+    public SurfaceTreeForSplayTree(String title, SplayTree tree) {
         setDimensions();
         this.title = title;
         this.tree = tree;
@@ -73,7 +73,7 @@ public class SurfaceTreeForLeftistTree extends JPanel {
         return f;
     }
 
-    private void printAll(LeftistTreeNode root, LeftistTreeNode parent, Node parentNode, int parentPosition) {
+    private void printAll(SplayTreeNode root, SplayTreeNode parent, Node parentNode, int parentPosition) {
         Node p;
 
         if (root != null && parent == null) {
@@ -88,7 +88,7 @@ public class SurfaceTreeForLeftistTree extends JPanel {
         }
     }
 
-    public void recursivePrint(LeftistTreeNode root, int parentPosition, Node innerNode, Node p) {
+    public void recursivePrint(SplayTreeNode root, int parentPosition, Node innerNode, Node p) {
         Node innerParent;
         int position;
 

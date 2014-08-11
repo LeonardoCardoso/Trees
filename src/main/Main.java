@@ -1,12 +1,14 @@
 package main;
 
-import element.Element;
+import tree.element.Element;
 import tree.algorithms.AVLTree;
 import tree.algorithms.FibonacciHeap;
 import tree.algorithms.LeftistTree;
+import tree.algorithms.SplayTree;
 import util.AVLTreeGraphicPrinter;
 import util.FibonacciHeapGraphicPrinter;
 import util.LeftistTreeGraphicPrinter;
+import util.SplayTreeGraphicPrinter;
 
 public class Main {
 
@@ -22,25 +24,42 @@ public class Main {
 //            new Element("01"),
 //            new Element("04"),
 
+//            new Element("03"),
+//            new Element("08"),
+//            new Element("21"),
+//            new Element("04"),
+//            new Element("09"),
+//            new Element("17"),
+//            new Element("32"),
+//            new Element("19"),
+//            new Element("44"),
+//            new Element("03"),
+//            new Element("07"),
+//            new Element("19"),
+//            new Element("26"),
+
             new Element("03"),
             new Element("08"),
-            new Element("21"),
-            new Element("04"),
-            new Element("09"),
             new Element("17"),
-            new Element("32"),
-            new Element("19"),
-            new Element("44"),
-            new Element("03"),
+            new Element("04"),
+            new Element("29"),
+            new Element("36"),
+            new Element("49"),
+            new Element("18"),
+            new Element("12"),
             new Element("07"),
-            new Element("19"),
-            new Element("26"),
+            new Element("23"),
+            new Element("52"),
+            new Element("48"),
+            new Element("11"),
+            new Element("32"),
     };
 
     public static void main(String[] args) {
 //        callAVLTree();
 //        callLeftistTree();
-        callFibonacciHeap();
+//        callFibonacciHeap();
+        callSplayTree();
     }
 
     private static void callAVLTree() {
@@ -80,6 +99,19 @@ public class Main {
 //        fibonacciHeap.remove();
 
         FibonacciHeapGraphicPrinter.drawAll("Fibonacci Heap", fibonacciHeap);
+    }
+
+    private static void callSplayTree() {
+        SplayTree leftistTree = new SplayTree();
+
+        for (Element element : SET) {
+            leftistTree.insert(element.value);
+        }
+
+//        leftistTree.printAll();
+
+        SplayTreeGraphicPrinter.drawAll("Splay Tree", leftistTree);
+
     }
 
 
