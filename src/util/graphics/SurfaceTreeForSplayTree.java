@@ -77,7 +77,7 @@ public class SurfaceTreeForSplayTree extends JPanel {
         Node p;
 
         if (root != null && parent == null) {
-            p = makeNode(root.value + "<br/>npl: " + tree.npl(root, -1), new Point(parentPosition, getRectNextTop(-1)), Node.COLOR_PARENT);
+            p = makeNode(root.value, new Point(parentPosition, getRectNextTop(-1)), Node.COLOR_PARENT);
         } else {
             p = parentNode;
         }
@@ -92,9 +92,9 @@ public class SurfaceTreeForSplayTree extends JPanel {
         Node innerParent;
         int position;
 
-        if (root != null) {
+        if (root != null && root.value != null) {
 
-            int height = tree.heightRootToNode(root);
+            int height = heightRootToNode(root);
             int nextTop = getRectNextTop(height);
 
             if (innerNode != null)
@@ -102,12 +102,12 @@ public class SurfaceTreeForSplayTree extends JPanel {
             else
                 innerParent = p;
 
-            if (root.parent.left != null && root.parent.left.equals(root)) {
+            if (root.parent.left != null && root.parent.left.value != null && root.parent.left.value.equals(root.value)) {
                 position = getRectNextLeft(parentPosition, height);
-                innerNode = makeNode(root.value + "<br/>npl: " + tree.npl(root, -1), new Point(position, nextTop), Node.COLOR_LEFT);
+                innerNode = makeNode(root.value, new Point(position, nextTop), Node.COLOR_LEFT);
             } else {
                 position = getRectNextRight(parentPosition, height);
-                innerNode = makeNode(root.value + "<br/>npl: " + tree.npl(root, -1), new Point(position, nextTop), Node.COLOR_RIGHT);
+                innerNode = makeNode(root.value, new Point(position, nextTop), Node.COLOR_RIGHT);
             }
 
             innerNode.setParent(innerParent);
@@ -118,6 +118,49 @@ public class SurfaceTreeForSplayTree extends JPanel {
             recursivePrint(root.right, parentPosition, innerNode, p);
         }
 
+    }
+
+    /**
+     * Finds a node
+     */
+    public int heightRootToNode(SplayTreeNode node) {
+        return heightRootToNode(this.tree.root, node, -1);
+    }
+
+    /**
+     * Finds a node
+     */
+    public int heightRootToNode(SplayTreeNode root, SplayTreeNode search, int height) {
+        height++;
+
+        if (search.value != null) {
+            if (search.value.equals(root.value))
+                return height;
+            else if (root.left != null || root.right != null) {
+                if (root.left != null) {
+                    if (search.value.equals(root.value))
+                        return height;
+                    else if (search.value.compareTo(root.value) < 0)
+                        return heightRootToNode(root.left, search, height);
+                    else if (root.right != null)
+                        return heightRootToNode(root.right, search, height);
+                    else
+                        return height;
+                }
+                if (search.value.equals(root.value))
+                    return height;
+                else if (search.value.compareTo(root.value) > 0)
+                    return heightRootToNode(root.right, search, height);
+                else if (root.left != null)
+                    return heightRootToNode(root.left, search, height);
+                else
+                    return height;
+            } else {
+                return height;
+            }
+        } else {
+            return height;
+        }
     }
 
 

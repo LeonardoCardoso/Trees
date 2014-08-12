@@ -64,28 +64,28 @@ public class AVLTree {
     /**
      * Finds a node
      */
-    public TreeNode find(TreeNode currentNode, String key) {
+    public TreeNode find(TreeNode currentNode, String value) {
         currentSearchHeight++;
 
-        if (key.equals(currentNode.value))
+        if (value.equals(currentNode.value))
             return currentNode;
         else if (currentNode.left != null || currentNode.right != null) {
             if (currentNode.left != null) {
-                if (key.equals(currentNode.value))
+                if (value.equals(currentNode.value))
                     return currentNode;
-                else if (key.compareTo(currentNode.value) < 0)
-                    return find(currentNode.left, key);
+                else if (value.compareTo(currentNode.value) < 0)
+                    return find(currentNode.left, value);
                 else if (currentNode.right != null)
-                    return find(currentNode.right, key);
+                    return find(currentNode.right, value);
                 else
                     return null;
             }
-            if (key.equals(currentNode.value))
+            if (value.equals(currentNode.value))
                 return currentNode;
-            else if (key.compareTo(currentNode.value) > 0)
-                return find(currentNode.right, key);
+            else if (value.compareTo(currentNode.value) > 0)
+                return find(currentNode.right, value);
             else if (currentNode.left != null)
-                return find(currentNode.left, key);
+                return find(currentNode.left, value);
             else
                 return null;
         } else {

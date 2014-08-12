@@ -1,10 +1,10 @@
 package main;
 
-import tree.element.Element;
 import tree.algorithms.AVLTree;
 import tree.algorithms.FibonacciHeap;
 import tree.algorithms.LeftistTree;
 import tree.algorithms.SplayTree;
+import tree.element.Element;
 import util.AVLTreeGraphicPrinter;
 import util.FibonacciHeapGraphicPrinter;
 import util.LeftistTreeGraphicPrinter;
@@ -102,15 +102,21 @@ public class Main {
     }
 
     private static void callSplayTree() {
-        SplayTree leftistTree = new SplayTree();
+        SplayTree splayTree = new SplayTree();
 
         for (Element element : SET) {
-            leftistTree.insert(element.value);
+            splayTree.insert(element.value);
         }
 
-//        leftistTree.printAll();
+//        splayTree.printAll();
 
-        SplayTreeGraphicPrinter.drawAll("Splay Tree", leftistTree);
+//        splayTree.find("08");
+//        splayTree.find("03");
+//        SplayTreeGraphicPrinter.drawAll("Splay Tree", splayTree);
+
+        splayTree.find("17");
+        splayTree.find("52");
+        SplayTreeGraphicPrinter.drawAll("Splay Tree", splayTree);
 
     }
 

@@ -1,16 +1,11 @@
 package tree.algorithms;
 
+import tree.node.LeftistTreeNode;
 import tree.node.SplayTreeNode;
 import util.SplayTreePrinter;
 
 import java.util.ArrayList;
 
-/**
- * Rules
- * 1. npl(left) >= npl(right)
- * 2. prio(root) >= prio(root.left) >= prio(root.right)
- * Splay tree is not a search structure, then it allows duplicate values
- */
 public class SplayTree {
 
     public SplayTreeNode root;
@@ -20,111 +15,71 @@ public class SplayTree {
      */
     public void insert(String value) {
         SplayTreeNode n = new SplayTreeNode(value);
-        insertLeftTree(this.root, n);
+        insertSplayTree(this.root, n);
     }
 
     /**
      * Insert new node
      */
-    private void insertLeftTree(SplayTreeNode currentNode, SplayTreeNode newNode) {
-
+    private void insertSplayTree(SplayTreeNode currentNode, SplayTreeNode newNode) {
         if (currentNode == null) {
             this.root = newNode;
-            this.root.parent = null;
         } else {
-            merge(currentNode, newNode);
-        }
-    }
 
-    /**
-     * Lazy merge: joins two left trees
-     */
-    public void merge(SplayTreeNode root, SplayTreeNode newNode) {
-        // Considering the tree.element with largest value on the top
+            if (newNode.value.compareTo(currentNode.value) < 0) {
+                if (currentNode.left == null) {
+                    currentNode.left = newNode;
+                    newNode.parent = currentNode;
+                } else {
+                    insertSplayTree(currentNode.left, newNode);
+                }
 
-        if (root.parent == null && root.value.compareTo(newNode.value) < 0) { // invert here to change to small priority on top
-            if (newNode.right == null) {
-                newNode.right = root;
+            } else if (newNode.value.compareTo(currentNode.value) > 0) {
+                if (currentNode.right == null) {
+                    currentNode.right = newNode;
+                    newNode.parent = currentNode;
+                } else {
+                    insertSplayTree(currentNode.right, newNode);
+                }
             } else {
-                merge(newNode, root);
+                System.out.println("\nValue " + newNode.value + " already exists. Ignoring...");
             }
-
-            root.parent = newNode;
-            newNode.parent = null;
-            performSwap(newNode);
-            this.root = newNode;
-        } else if (root.right == null) {
-            root.right = newNode;
-            newNode.parent = root;
-            performSwap(root);
-        } else if (root.right.value.compareTo(newNode.value) < 0) { // invert here to change to small priority on top
-            SplayTreeNode detached = root.right;
-            root.right = newNode;
-            newNode.parent = root;
-            merge(newNode, detached);
-            performSwap(newNode);
-        } else {
-            merge(root.right, newNode);
-            performSwap(root.right);
         }
-    }
-
-    /**
-     * Null Path Length: The shortest distance bettween the current node to the closest null node
-     */
-    public int npl(SplayTreeNode root, int npl) {
-        if (root == null)
-            return -1;
-
-        if (root.left != null && root.right != null) {
-            int left = npl(root.left, npl);
-            int right = npl(root.right, npl);
-            npl = Math.min(left, right);
-        }
-
-        return npl + 1;
-    }
-
-    private void performSwap(SplayTreeNode root) {
-        if (root != null) {
-            SplayTreeNode right, left, toBeSwapped;
-
-            if (root.parent != null) {
-                toBeSwapped = root.parent;
-                right = toBeSwapped.right;
-                left = toBeSwapped.left;
-            } else {
-                toBeSwapped = root;
-                right = root.right;
-                left = root.left;
-            }
-
-            String rightValue = right == null ? "" : right.value;
-            String leftValue = left == null ? "" : left.value;
-
-            int rightNpl = right == null ? -1 : npl(right, -1);
-            int leftNpl = left == null ? -1 : npl(left, -1);
-
-            if (rightNpl > leftNpl || (rightNpl == leftNpl && leftValue.compareTo(rightValue) < 0)) { // invert here to change to small priority on top
-                swap(toBeSwapped);
-            }
-
-            performSwap(root.left);
-            performSwap(root.right);
-        }
-    }
-
-    private void swap(SplayTreeNode left) {
-        SplayTreeNode swap = left.left;
-        left.left = left.right;
-        left.right = swap;
     }
 
     /**
      * Finds a node
      */
     public SplayTreeNode find(String value) {
-        return find(this.root, value);
+        SplayTreeNode result = find(this.root, value);
+
+        if (result != null) {
+            while (result.parent != null) {
+                if (result.parent.parent == null) { // single rotations
+                    if (result.parent.left != null && result.parent.left.equals(result)) { // zig rotation
+                        result = zig(result);
+                    } else if (result.parent.right != null && result.parent.right.equals(result)) { // zag rotation
+                        result = zag(result);
+                    }
+                } else { // double rotations
+                    if (result.parent.parent.left != null && result.parent.parent.left.left != null && result.parent.parent.left.left.equals(result)) { // zig-zig rotation
+                        result = zigZig(result);
+                    } else if (result.parent.parent.left != null && result.parent.parent.left.right != null && result.parent.parent.left.right.equals(result)) { // zag-zig rotation
+                        result = zagZig(result);
+                    } else if (result.parent.parent.right != null && result.parent.parent.right.left != null && result.parent.parent.right.left.equals(result)) { // zig-zag rotation
+                        result = zigZag(result);
+                    } else if (result.parent.parent.right != null && result.parent.parent.right.right != null && result.parent.parent.right.right.equals(result)) { // zag-zag rotation
+                        result = zagZag(result);
+                    }
+                }
+            }
+        }
+
+        if (result != null) {
+            this.root = result;
+        }
+
+        return result;
     }
 
     /**
@@ -132,23 +87,169 @@ public class SplayTree {
      */
     public SplayTreeNode find(SplayTreeNode currentNode, String value) {
 
-        SplayTreeNode result = null;
-
-        if (currentNode != null) {
-            if (currentNode.value.equals(value)) {
-                result = currentNode;
-            } else {
-                result = find(currentNode.right, value);
-
-                if (result == null)
-                    result = find(currentNode.left, value);
+        if (value.equals(currentNode.value))
+            return currentNode;
+        else if (currentNode.left != null || currentNode.right != null) {
+            if (currentNode.left != null) {
+                if (value.equals(currentNode.value))
+                    return currentNode;
+                else if (value.compareTo(currentNode.value) < 0)
+                    return find(currentNode.left, value);
+                else if (currentNode.right != null)
+                    return find(currentNode.right, value);
+                else
+                    return null;
             }
+            if (value.equals(currentNode.value))
+                return currentNode;
+            else if (value.compareTo(currentNode.value) > 0)
+                return find(currentNode.right, value);
+            else if (currentNode.left != null)
+                return find(currentNode.left, value);
+            else
+                return null;
         } else {
-            result = null;
+            return null;
         }
 
-        return result;
+    }
 
+    /**
+     * Rotation left to right
+     */
+    private SplayTreeNode zig(SplayTreeNode node) {
+        SplayTreeNode k1 = new SplayTreeNode(node);
+        SplayTreeNode a = new SplayTreeNode(node.left);
+        SplayTreeNode b = new SplayTreeNode(node.right);
+        if (a.isNull())
+            a.parent = k1;
+        if (b.isNull())
+            b.parent = k1;
+
+        SplayTreeNode k2 = new SplayTreeNode(node.parent);
+        SplayTreeNode k2Parent = k2.parent;
+        SplayTreeNode c = new SplayTreeNode(node.parent.right);
+        if (c.isNull())
+            c.parent = k2;
+
+        k2.left = b;
+
+        k1.right = k2;
+
+        b.parent = k2;
+        k2.parent = k1;
+
+        node = k1;
+        node.parent = k2Parent;
+
+        if (node.parent != null) {
+            node.parent.left = node;
+        }
+
+        return node;
+    }
+
+    /**
+     * Rotation right to left
+     */
+    private SplayTreeNode zag(SplayTreeNode node) {
+        SplayTreeNode k1 = new SplayTreeNode(node.parent);
+        SplayTreeNode k1Parent = k1.parent;
+        SplayTreeNode a = new SplayTreeNode(node.parent.left);
+        if (a.isNull())
+            a.parent = k1;
+
+        SplayTreeNode k2 = new SplayTreeNode(node);
+        SplayTreeNode b = new SplayTreeNode(node.left);
+        SplayTreeNode c = new SplayTreeNode(node.right);
+        if (b.isNull())
+            b.parent = k2;
+        if (c.isNull())
+            c.parent = k2;
+
+        k1.right = b;
+
+        k2.left = k1;
+
+        b.parent = k1;
+        k1.parent = k2;
+
+        node = k2;
+        node.parent = k1Parent;
+
+        if (node.parent != null) {
+            node.parent.right = node;
+        }
+
+        return node;
+    }
+
+    /**
+     * Double rotation left to right
+     */
+    private SplayTreeNode zigZag(SplayTreeNode node) {
+        return null;
+    }
+
+    /**
+     * Double rotation right to left
+     */
+    private SplayTreeNode zagZig(SplayTreeNode node) {
+        return null;
+    }
+
+    /**
+     * Double rotation left to left
+     */
+    private SplayTreeNode zigZig(SplayTreeNode node) {
+        return null;
+    }
+
+    /**
+     * Double rotation right to right
+     */
+    private SplayTreeNode zagZag(SplayTreeNode node) {
+        SplayTreeNode k1 = new SplayTreeNode(node.parent.parent);
+        SplayTreeNode k1Parent = k1.parent;
+        SplayTreeNode a = new SplayTreeNode(node.parent.parent.left);
+        if (a.isNull())
+            a.parent = k1;
+
+        SplayTreeNode k2 = new SplayTreeNode(node.parent);
+        SplayTreeNode b = new SplayTreeNode(node.parent.left);
+        if (b.isNull())
+            b.parent = k2;
+
+        SplayTreeNode k3 = new SplayTreeNode(node);
+        SplayTreeNode c = new SplayTreeNode(node.left);
+        SplayTreeNode d = new SplayTreeNode(node.right);
+        if (c.isNull())
+            c.parent = k3;
+        if (d.isNull())
+            d.parent = k3;
+
+        k1.left = a;
+        k1.right = b;
+
+        k2.left = k1;
+        k2.right = c;
+
+        k3.left = k2;
+        k3.right = d;
+
+        k3.parent = k1Parent;
+        k1.parent = k2;
+        k2.parent = k3;
+        b.parent = k1;
+        c.parent = k2;
+
+        node = k3;
+
+        if (node.parent != null) {
+            node.parent.right = node;
+        }
+
+        return node;
     }
 
     /**
@@ -157,41 +258,13 @@ public class SplayTree {
      * @hash is just to print index in table hash
      */
     public void remove() {
-        removeLeftTree(this.root);
+        removeSplayTree(this.root);
     }
 
     /**
      * Removes the node from the top..
      */
-    private void removeLeftTree(SplayTreeNode startingNode) {
-        if (this.root != null) {
-            SplayTreeNode toBeRemoved = this.root;
-            SplayTreeNode newRoot;
-            if (this.root.right == null) {
-                if (this.root.left == null) {
-                    this.root = null;
-                } else {
-                    this.root = this.root.left;
-                    this.root.parent = null;
-                }
-                System.out.println("\nElement removed successfully.");
-            } else {
-                if (toBeRemoved.left.value.compareTo(toBeRemoved.right.value) > 0) { // invert here to change to small priority on top
-                    newRoot = toBeRemoved.left;
-                    newRoot.parent = null;
-                    merge(newRoot, toBeRemoved.right);
-                    this.root = newRoot;
-                } else {
-                    newRoot = toBeRemoved.right;
-                    newRoot.parent = null;
-                    merge(newRoot, toBeRemoved.left);
-                    this.root = newRoot;
-                }
-                performSwap(this.root.right);
-                System.out.println("\nElement removed successfully.");
-            }
-        }
-
+    private void removeSplayTree(SplayTreeNode startingNode) {
     }
 
     /**
@@ -222,20 +295,6 @@ public class SplayTree {
         } else {
             return 1 + maximum(height(currentNode.left), height(currentNode.right));
         }
-    }
-
-    /**
-     * Calculating the height of a node according to the root.
-     */
-    public int heightRootToNode(SplayTreeNode currentNode) {
-        int height = 0;
-
-        while (currentNode.parent != null) {
-            height++;
-            currentNode = currentNode.parent;
-        }
-
-        return height;
     }
 
     /**

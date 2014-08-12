@@ -20,13 +20,13 @@ public class LeftistTree {
      */
     public void insert(String value) {
         LeftistTreeNode n = new LeftistTreeNode(value);
-        insertLeftTree(this.root, n);
+        insertLeftistTree(this.root, n);
     }
 
     /**
      * Insert new node
      */
-    private void insertLeftTree(LeftistTreeNode currentNode, LeftistTreeNode newNode) {
+    private void insertLeftistTree(LeftistTreeNode currentNode, LeftistTreeNode newNode) {
 
         if (currentNode == null) {
             this.root = newNode;
@@ -157,13 +157,13 @@ public class LeftistTree {
      * @hash is just to print index in table hash
      */
     public void remove() {
-        removeLeftTree(this.root);
+        removeLeftistTree(this.root);
     }
 
     /**
      * Removes the node from the top..
      */
-    private void removeLeftTree(LeftistTreeNode startingNode) {
+    private void removeLeftistTree(LeftistTreeNode startingNode) {
         if (this.root != null) {
             LeftistTreeNode toBeRemoved = this.root;
             LeftistTreeNode newRoot;
