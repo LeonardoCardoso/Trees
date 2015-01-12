@@ -8,8 +8,8 @@ This project contains:
 	<li>AVL Tree</li>
 	<li>Leftist Tree</li>
 	<li>Fibonacci Heap (collection of leftist trees)</li>
-	<li>Splay Tree (in development)</li>
-	<li>Red–black Tree (to be developed)</li>
-	<li>B Tree (to be developed)</li>
-	<li>B+ Tree (to be developed)</li>
+	<li>Splay Tree</li>
 </ul>
+
+
+For more details, visit http://lab.leocardz.com/trees/

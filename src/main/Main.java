@@ -59,7 +59,7 @@ public class Main {
 //        callAVLTree();
 //        callLeftistTree();
 //        callFibonacciHeap();
-        callSplayTree();
+//        callSplayTree();
     }
 
     private static void callAVLTree() {
@@ -115,7 +115,7 @@ public class Main {
 //        SplayTreeGraphicPrinter.drawAll("Splay Tree", splayTree);
 
         splayTree.find("17");
-        splayTree.find("52");
+//        splayTree.find("52");
         SplayTreeGraphicPrinter.drawAll("Splay Tree", splayTree);
 
     }
