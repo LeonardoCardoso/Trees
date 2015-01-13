@@ -1,6 +1,5 @@
 package tree.algorithms;
 
-import tree.node.LeftistTreeNode;
 import tree.node.SplayTreeNode;
 import util.SplayTreePrinter;
 

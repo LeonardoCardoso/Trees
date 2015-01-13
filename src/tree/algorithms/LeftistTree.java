@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Rules
  * 1. npl(left) >= npl(right)
- * 2. prio(root) >= prio(root.left) >= prio(root.right)
+ * 2. prio(node) >= prio(node.left) >= prio(node.right)
  * Leftist tree is not a search structure, then it allows duplicate values
  */
 public class LeftistTree {
