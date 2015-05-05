@@ -1,6 +1,8 @@
 Trees
 ==============
 
+Developed by <a href='https://github.com/LeonardoCardoso' target='_blank'>@LeonardoCardoso</a>. 
+
 Set of many algorithms related to <b>Trees</b> with <b>lexicographical ordering</b>.
 
 This project contains:
