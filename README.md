@@ -14,8 +14,6 @@ This project contains:
 </ul>
 
 
-For more details, visit http://lab.leocardz.com/trees/
-
 ## Contact
 Contact me either by Twitter [@leocardz](https://twitter.com/leocardz) or emailing me to [contact@leocardz.com](mailto:contact@leocardz.com).
 
